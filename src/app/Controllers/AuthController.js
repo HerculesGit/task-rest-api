@@ -2,7 +2,7 @@
 const { Op } = require("sequelize");
 const models = require('../../../models');
 
-const Cryptography = require('../../services/cryptography/cryptography');
+const JWTTokenService = require('../Services/JWTTokenService');
 
 class AuthController {
   async login(req, res) {
@@ -28,7 +28,10 @@ class AuthController {
 
       });
 
-      return res.status(200).send(user);
+      const userToken = await JWTTokenService.sign(user.id);
+      userToken.user = user;
+
+      return res.status(200).send(userToken);
 
     } catch (error) {
       console.log(error)
@@ -61,8 +64,10 @@ class AuthController {
 
       const userId = userCreated['id'];
       const result = await models.AuthUser.create({ username, email, password, userId });
+      const userToken = await JWTTokenService.sign(userId);
+      userToken.user = result;
 
-      return res.status(201).send(result);
+      return res.status(201).send(userToken);
     } catch (error) {
       console.log(error)
       return res.status(500).send({ error: true, message: 'Internal server error' });
