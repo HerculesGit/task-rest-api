@@ -6,6 +6,8 @@ const AuthController = require('./app/Controllers/AuthController');
 
 const routes = new Router();
 
+const { verifyToken } = require('./app/Services/JWTTokenService');
+
 // by user
 routes.post('/user', AuthController.createUser);
 routes.post('/login', AuthController.login);
@@ -14,10 +16,10 @@ routes.get('/users', UserController.getAll);
 routes.get('/user/:id', UserController.getOne);
 
 // by tasks
-routes.get('/user/:userId/tasks', TaskController.getTasks);
-routes.get('/task/:id', TaskController.getOne);
-routes.post('/tasks', TaskController.create);
-routes.put('/task/:id', TaskController.update);
-routes.delete('/task/:id', TaskController.delete);
+routes.get('/user/:userId/tasks', verifyToken, TaskController.getTasks);
+routes.get('/task/:id', verifyToken, TaskController.getOne);
+routes.post('/tasks', verifyToken, TaskController.create);
+routes.put('/task/:id', verifyToken, TaskController.update);
+routes.delete('/task/:id', verifyToken, TaskController.delete);
 
 module.exports = routes;
