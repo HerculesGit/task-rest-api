@@ -16,7 +16,7 @@ class AuthController {
 
       if (!email) email = '';
 
-      const user = await models.AuthUser.findOne({
+      const authUser = await models.AuthUser.findOne({
         where: {
           password: password,
 
@@ -28,12 +28,15 @@ class AuthController {
         raw: true,
       });
 
-      if (!user) return res.status(404).send({ error: true, message: 'User not found.' })
+      if (!authUser) return res.status(404).send({ error: true, message: 'User not found.' })
 
-      const userToken = await JWTTokenService.sign(user.id);
+      const userToken = await JWTTokenService.sign(authUser.id);
+      const user = await models.User.findOne({ where: { id: authUser.userId } });
       userToken.user = user;
 
-      return res.status(200).send(userToken);
+      Object.keys(userToken).map(key => authUser[key] = userToken[key]);
+
+      return res.status(200).send(authUser);
 
     } catch (error) {
       console.log(error)
