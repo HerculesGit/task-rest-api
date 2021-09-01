@@ -14,19 +14,21 @@ class AuthController {
 
       // password = Cryptography.encrypt(password);
 
-      const user = models.AuthUser.findOne({
+      if (!email) email = '';
+
+      const user = await models.AuthUser.findOne({
         where: {
           password: password,
 
           [Op.or]: [
-            {
-              username: username,
-              email: email
-            },
+            { username: username },
+            { email: email }
           ]
         },
-
+        raw: true,
       });
+
+      if (!user) return res.status(404).send({ error: true, message: 'User not found.' })
 
       const userToken = await JWTTokenService.sign(user.id);
       userToken.user = user;
