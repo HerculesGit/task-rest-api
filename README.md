@@ -8,6 +8,9 @@ yarn dev
 # create database on postgres
 npx sequelize db:create
 
+# grop database
+npx sequelize db:drop
+
 # or
 npx sequelize-cli model:generate --name User --attributes firstName:string,lastName:string,email:string
 

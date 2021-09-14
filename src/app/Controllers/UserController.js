@@ -2,9 +2,10 @@ const models = require('../../../models')
 
 class UserController {
   async getOne(req, res) {
-    const result = await models.User.findOne({ where: { id: 'a53305a4-d07b-4178-a270-1ca200fa776a' } })
+    const id = req.params.id;
+    const result = await models.User.findOne({ where: { id: id } })
 
-    console.log('result ', result)
+    console.log('result ', id)
     res.status(200).json(result);
   }
 

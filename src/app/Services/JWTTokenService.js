@@ -7,7 +7,7 @@ dotenv.config();
 class JWTTokenService {
   async sign(userId) {
     const token = await jwt.sign({ userId }, process.env.SECRET, {
-      expiresIn: 300, // expires in 5min
+      expiresIn: '2 days', // expires in 5min
     });
 
     return { auth: true, token: token, user: {} };

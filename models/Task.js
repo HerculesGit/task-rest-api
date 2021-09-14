@@ -9,7 +9,7 @@ const Task = (sequelize, DataTypes) => {
       },
       primaryKey: true
     },
-    title: DataTypes.STRING,
+    name: DataTypes.STRING,
     isDone: DataTypes.BOOLEAN,
     userId: {
       type: DataTypes.UUID,
